@@ -1,5 +1,14 @@
 {
-  "dependencies": {
-    "selenium-webdriver": "^4.19.0"
-  }
+	"author": "Mohammad ",
+	"private": true,
+	"name": "ics4u1-project-downloader",
+	"version": "1.0.0",
+	"description": "This is a project to download, sort and arrange all my Replit Team projects for ICS4U1.",
+	"scripts": {
+		"download": "node projectDownloader.js",
+		"sort": "bash projectSorter.sh"
+	},
+	"dependencies": {
+		"selenium-webdriver": "^4.19.0"
+	}
 }

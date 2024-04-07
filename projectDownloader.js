@@ -1,7 +1,16 @@
+/*
+	Date: 2024-04-07
+	This program is designed to download all projects from a Replit team. It heavily depends on REPLIT UI not changing.
+	To run this program, you must have Node.js installed on your computer and you must install selenium-webdriver using npm.
+
+	This program may break if Replit's UI changes
+*/
+
 const { Builder, By, Browser, until } = require('selenium-webdriver');
 // Get user to enter their email and password
 // Ask user for input
 const readline = require('readline');
+const fs = require('fs');
 const rl = readline.createInterface({
 	input: process.stdin,
 	output: process.stdout,
@@ -11,6 +20,7 @@ let email = '';
 let password = '';
 let timeData = 30;
 
+let teamName = 'ics4u-40-buckland';
 console.log(
 	'\x1b[34m%s\x1b[0m',
 	'Information Required to Run Program (not collected):'
@@ -82,12 +92,14 @@ rl.on('close', () => {
 			10000
 		);
 		// Switch to teams page
-		await driver.get('https://replit.com/team/ics4u-40-buckland');
+		await driver.get('https://replit.com/team/' + teamName);
 
-		// Find all <a> elements with href containing '@ics4u-40-buckland/'
+		// Find all <a> elements with href containing the teamName
 		const links = await driver.findElements(
 			By.xpath(
-				'//a[contains(@href, "@ics4u-40-buckland/") and contains(text(), "Continue working")]'
+				'//a[contains(@href, "@' +
+					teamName +
+					'/") and contains(text(), "Continue working")]'
 			)
 		);
 
@@ -108,9 +120,10 @@ rl.on('close', () => {
 				})
 			);
 		}
-		console.log('Links with href containing "@ics4u-40-buckland/":', hrefs);
+		console.log('Links with href containing "@' + teamName + '/":', hrefs);
 
-		// Get rid of duplicates in the array
+		// Write all these URL's to a file
+		fs.writeFileSync('projects.txt', hrefs.join('\n'));
 
 		// Open all these URL's starting with the first one
 		for (let i = 0; i < hrefs.length; i++) {
