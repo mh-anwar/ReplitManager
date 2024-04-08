@@ -21,53 +21,51 @@ let hrefs;
 let email = '';
 let password = '';
 let timeData = 30;
-
 let teamName = 'ics4u-40-buckland';
-console.log(
-	'\x1b[34m%s\x1b[0m',
-	'Information Required to Run Program (not collected):'
-);
-rl.question('Enter your email: ', (emailData) => {
-	email = emailData;
-	rl.question('Enter your password: ', (passwordData) => {
-		password = passwordData;
+
+function askQuestion(question) {
+	return new Promise((resolve, reject) => {
+		rl.question(question, (answer) => {
+			resolve(answer);
+		});
+	});
+}
+
+async function getUserInput() {
+	console.log(
+		'\x1b[34m%s\x1b[0m',
+		'Information Required to Run Program (not collected):'
+	);
+	email = await askQuestion('Enter your email: ');
+	password = await askQuestion('Enter your password: ');
+	console.log(
+		'\x1b[31m%s\x1b[0m',
+		"\nThis next question is pretty important, if your internet is slow, you'll want to increase the time between project downloads. If your internet is fast, you can decrease the time between project downloads. The default is 30 seconds."
+	);
+	timeData = await askQuestion(
+		'How long should we wait between project downloads (type in a number in seconds): '
+	);
+	while (isNaN(timeData)) {
+		console.log('Please enter a valid number.');
+		timeData = await askQuestion(
+			'How long should we wait between project downloads (type in a number in seconds): '
+		);
+	}
+	let confirmation = await askQuestion(
+		`Are you absolutely sure that you want to timeout for *\x1b[34m${timeData}\x1b[0m* seconds between project downloads? (yes/no): `
+	);
+	if (confirmation.toLowerCase() !== 'yes') {
 		console.log(
 			'\x1b[31m%s\x1b[0m',
-			"\nThis next question is pretty important, if your internet is slow, you'll want to increase the time between project downloads. If your internet is fast, you can decrease the time between project downloads. The default is 30 seconds."
+			'\nPlease restart the program and enter a valid number'
 		);
-		rl.question(
-			'How long should we wait between project downloads (type in a number in seconds): ',
-			(timeout) => {
-				timeData = timeout;
-				// Make sure timeData is an integer, if not end the program
-				if (isNaN(timeData)) {
-					console.log(
-						'\x1b[31m%s\x1b[0m',
-						'\nPlease restart the program and enter a valid number'
-					);
-					process.exit(0);
-				}
+		process.exit(0);
+	}
+	rl.close();
+}
 
-				rl.question(
-					'Are you absolutely sure that you want to timeout for *' +
-						timeout +
-						'* seconds between project downloads? (yes/no):',
-					(yesNo) => {
-						if (yesNo === 'yes') {
-							rl.close();
-						} else {
-							// End program
-							console.log(
-								'\x1b[31m%s\x1b[0m',
-								'\nPlease restart the program'
-							);
-							process.exit(0);
-						}
-					}
-				);
-			}
-		);
-	});
+getUserInput().catch((error) => {
+	console.error(error); // Fine, we'll throw the error
 });
 
 // Wait for the question to be answered
