@@ -1,33 +1,5 @@
 #!/bin/bash
 
-# Function to add and commit all files in the current directory
-function git_add_commit() {
-    # Iterate through all files in the current directory
-    for file in * .*; do
-        # Skip . and ..
-        if [[ "$file" == "." || "$file" == ".." ]]; then
-            continue
-        fi
-        
-        # Check if the file exists
-        if [ -e "$file" ]; then
-            # Check if the file is a directory
-            if [ -d "$file" ]; then
-                # If it's a directory, enter it and recursively call git_add_commit
-                cd "$file" || exit
-                git_add_commit
-                cd .. || exit
-            else
-                # If it's a file, add it to the staging area and commit with the last modified date
-                git add "$file"
-                last_modified=$(stat -c %Y "$file")
-                fileName=$(basename "$file")
-                git commit -q -m "Commit $fileName at $(date -d @"$last_modified" +'%Y-%m-%d %H:%M:%S')" --date="$(date -d @"$last_modified" +'%Y-%m-%d %H:%M:%S')" "$file"
-            fi
-        fi
-    done
-}
-
 # Main program
 echo "Where are all the projects located?  Current Dir: $(pwd)"
 printf "%s/" "$HOME"
@@ -97,13 +69,6 @@ do
     # Change back to parent directory
     cd "$HOME/$destinationPath"
 
-    #! Old code
-    # Copy each file from source to destination (switch to mv after testing)
-    # cp -r "$HOME/$sourcePath/$line" "$HOME/$destinationPath"
-    # git add "$HOME/$destinationPath/$destFolder"
-    # git commit -m "Added $destFolder" --date="`date -r $HOME/$destinationPath/$destFolder/Main.class`"
-    # git commit -m "Added $destFolder" --date="`date -r $HOME/$sourcePath/$line`"
-
 done < ".projekts"
 rm .projekts
 
@@ -123,8 +88,6 @@ find . -type f -print0 | while IFS= read -r -d '' file; do
     GIT_COMMITTER_DATE="$formatted_date" git commit -q --amend --date="$formatted_date" --no-edit
 done
 
-
-# git_add_commit
 
 printf "\nAll projects have been extracted, and committed at $HOME/$destinationPath"
 
