@@ -34,7 +34,13 @@ do
     cp "$HOME/$sourcePath/$line" "$HOME/$destinationPath"
 done < ".projekts"
 
-sourcePath="/home/mohammad/Downloads"
+# Now extract each .zip file into same directory
+
+# Clean-up/delete Replit system files
+
+# Initialize git
+
+# Add each folder, commit, modify commit dates to match project, push to GitHub
 
 
 
