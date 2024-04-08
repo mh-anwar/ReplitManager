@@ -70,8 +70,10 @@ getUserInput().catch((error) => {
 
 // Wait for the question to be answered
 rl.on('close', () => {
-	email = 's201076699@ddsbstudent.ca';
-	password = 'Reset_*(0s!!,ss';
+	// DEBUGGING PURPOSES
+	email = process.env.EMAIL;
+	password = process.env.PASS;
+
 	console.log(
 		'Using email and password to login: ' + email + ' and ' + password
 	);
@@ -82,10 +84,9 @@ rl.on('close', () => {
 		await driver.get('https://replit.com/login');
 
 		// Login Process (assumes the user has provided correct username and password)
-		// Enter email and password
+		// Enter email and password and login
 		await driver.findElement({ id: 'username-:r0:' }).sendKeys(email);
 		await driver.findElement({ id: 'password-:r6:' }).sendKeys(password);
-		// Click the login button
 		await driver.findElement(By.css('[data-cy="log-in-btn"]')).click();
 
 		// Wait for login to complete
@@ -93,6 +94,7 @@ rl.on('close', () => {
 			until.elementLocated(By.css('[data-cy="home-text"]')),
 			10000
 		);
+
 		// Switch to teams page
 		await driver.get('https://replit.com/team/' + teamName);
 
@@ -104,7 +106,7 @@ rl.on('close', () => {
 					'/") and contains(text(), "Continue working")]'
 			)
 		);
-		console.log('@' + teamName + '/');
+
 		// Extract href attribute values and store them in an array
 		hrefs = await Promise.all(
 			links.map(async (link) => {
@@ -124,8 +126,8 @@ rl.on('close', () => {
 		}
 		// DEBUGGER: console.log('Links with href containing "@' + teamName + '/":', hrefs);
 
-		/* 	// Open all these URL's starting with the first one
-		for (let i = 0; i < hrefs.length; i++) {
+		// Open all these URL's starting with the first one
+		/* 	for (let i = 0; i < hrefs.length; i++) {
 			// Append `.zip` to the end of each of these to initiate downloading them
 			const url = hrefs[i] + '.zip';
 			await driver.executeScript(`window.open('${url}', '_blank');`);
@@ -137,9 +139,9 @@ rl.on('close', () => {
 
 		// Close the browser
 		await driver.quit();
-		// Process and clean file names
-		// Remove https://replit.com/teamname/ from the front of the string
-		// Add .zip to the end of the string
+
+		// Process and clean file names to put them into a .projects file
+		// Remove https://replit.com/teamname/ from the front of the string, add .zip to the end of the string
 		for (let i = 0; i < hrefs.length; i++) {
 			const projectNamePart = hrefs[i].replace(
 				new RegExp(`^https://replit.com/@${teamName}/`),
@@ -149,7 +151,7 @@ rl.on('close', () => {
 			projectNames.push(projectNamePart + '.zip');
 		}
 		// Write all these URL's to a file
-		fs.writeFileSync('projects.txt', projectNames.join('\n'));
+		fs.writeFileSync('.projekts', projectNames.join('\n'));
 	})();
 });
 

@@ -5,7 +5,7 @@
 	"version": "1.0.0",
 	"description": "This is a project to download, sort and arrange all my Replit Team projects for ICS4U1.",
 	"scripts": {
-		"download": "node projectDownloader.js",
+		"download": "node --env-file=.env projectDownloader.js",
 		"sort": "bash projectSorter.sh"
 	},
 	"dependencies": {
