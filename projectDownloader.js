@@ -16,6 +16,8 @@ const rl = readline.createInterface({
 	output: process.stdout,
 });
 
+let projectNames = [];
+let hrefs;
 let email = '';
 let password = '';
 let timeData = 30;
@@ -70,6 +72,8 @@ rl.question('Enter your email: ', (emailData) => {
 
 // Wait for the question to be answered
 rl.on('close', () => {
+	email = 's201076699@ddsbstudent.ca';
+	password = 'Reset_*(0s!!,ss';
 	console.log(
 		'Using email and password to login: ' + email + ' and ' + password
 	);
@@ -102,9 +106,9 @@ rl.on('close', () => {
 					'/") and contains(text(), "Continue working")]'
 			)
 		);
-
+		console.log('@' + teamName + '/');
 		// Extract href attribute values and store them in an array
-		let hrefs = await Promise.all(
+		hrefs = await Promise.all(
 			links.map(async (link) => {
 				return await link.getAttribute('href');
 			})
@@ -120,12 +124,9 @@ rl.on('close', () => {
 				})
 			);
 		}
-		console.log('Links with href containing "@' + teamName + '/":', hrefs);
+		// DEBUGGER: console.log('Links with href containing "@' + teamName + '/":', hrefs);
 
-		// Write all these URL's to a file
-		fs.writeFileSync('projects.txt', hrefs.join('\n'));
-
-		// Open all these URL's starting with the first one
+		/* 	// Open all these URL's starting with the first one
 		for (let i = 0; i < hrefs.length; i++) {
 			// Append `.zip` to the end of each of these to initiate downloading them
 			const url = hrefs[i] + '.zip';
@@ -134,10 +135,23 @@ rl.on('close', () => {
 			await new Promise((resolve) =>
 				setTimeout(resolve, timeData * 1000)
 			);
-		}
+		} */
 
 		// Close the browser
 		await driver.quit();
+		// Process and clean file names
+		// Remove https://replit.com/teamname/ from the front of the string
+		// Add .zip to the end of the string
+		for (let i = 0; i < hrefs.length; i++) {
+			const projectNamePart = hrefs[i].replace(
+				new RegExp(`^https://replit.com/@${teamName}/`),
+				''
+			);
+			// Append ".zip" to the project name and push it to the array
+			projectNames.push(projectNamePart + '.zip');
+		}
+		// Write all these URL's to a file
+		fs.writeFileSync('projects.txt', projectNames.join('\n'));
 	})();
 });
 
