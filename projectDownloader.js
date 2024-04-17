@@ -70,10 +70,6 @@ getUserInput().catch((error) => {
 
 // Wait for the question to be answered
 rl.on('close', () => {
-	// DEBUGGING PURPOSES
-	email = process.env.EMAIL;
-	password = process.env.PASS;
-
 	console.log(
 		'Using email and password to login: ' + email + ' and ' + password
 	);
