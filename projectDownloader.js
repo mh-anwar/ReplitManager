@@ -5,8 +5,9 @@
 
 	This program may break if Replit's UI changes
 */
-
+const Firefox = require('selenium-webdriver/firefox');
 const { Builder, By, Browser, until } = require('selenium-webdriver');
+let options = new Firefox.Options();
 // Get user to enter their email and password
 // Ask user for input
 const readline = require('readline');
@@ -75,7 +76,7 @@ rl.on('close', () => {
 	);
 
 	(async function () {
-		let driver = await new Builder().forBrowser(Browser.CHROME).build();
+		let driver = await new Builder().forBrowser(Browser.FIREFOX).build();
 
 		await driver.get('https://replit.com/login');
 
