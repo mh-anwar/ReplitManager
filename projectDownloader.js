@@ -102,14 +102,14 @@ rl.on('close', () => {
 					'/") and contains(text(), "Continue working")]'
 			)
 		);
-
+		console.log('Got all the links to the projects');
 		// Extract href attribute values and store them in an array
 		hrefs = await Promise.all(
 			links.map(async (link) => {
 				return await link.getAttribute('href');
 			})
 		);
-
+		console.log('Getting relevant download elements');
 		if (hrefs.length === 0) {
 			// Retry if no links are found --> check if
 			// Wait for an H4 element to appear, it's text is `Unit 1 - Examples`
@@ -123,7 +123,7 @@ rl.on('close', () => {
 		// DEBUGGER: console.log('Links with href containing "@' + teamName + '/":', hrefs);
 
 		// Open all these URL's starting with the first one
-		/* 	for (let i = 0; i < hrefs.length; i++) {
+		for (let i = 0; i < hrefs.length; i++) {
 			// Append `.zip` to the end of each of these to initiate downloading them
 			const url = hrefs[i] + '.zip';
 			await driver.executeScript(`window.open('${url}', '_blank');`);
@@ -131,7 +131,7 @@ rl.on('close', () => {
 			await new Promise((resolve) =>
 				setTimeout(resolve, timeData * 1000)
 			);
-		} */
+		}
 
 		// Close the browser
 		await driver.quit();
