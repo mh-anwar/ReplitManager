@@ -36,6 +36,10 @@ async function getUserInput() {
 		'\x1b[34m%s\x1b[0m',
 		'Information Required to Run Program (not collected):'
 	);
+
+	teamName = await askQuestion(
+		'What is your team name (e.g. ics4u-40-buckland): '
+	);
 	email = await askQuestion('Enter your email: ');
 	password = await askQuestion('Enter your password: ');
 	console.log(
