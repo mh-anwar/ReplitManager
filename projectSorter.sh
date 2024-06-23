@@ -66,6 +66,12 @@ do
     # Delete .cache directory if it exists
     [ -d ".cache" ] && rm -rf ".cache"
 
+    # Delete Java .class files
+    find . -name "*.class" -type f -delete
+
+    # Delete .project files
+    find . -name "*.project" -type f -delete
+
     # Change back to parent directory
     cd "$HOME/$destinationPath"
 
