@@ -121,7 +121,7 @@ rl.on('close', () => {
 			);
 		}
 		// DEBUGGER: console.log('Links with href containing "@' + teamName + '/":', hrefs);
-
+		console.log('Downloading projects');
 		// Open all these URL's starting with the first one
 		for (let i = 0; i < hrefs.length; i++) {
 			// Append `.zip` to the end of each of these to initiate downloading them
